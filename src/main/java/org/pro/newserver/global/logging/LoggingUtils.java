@@ -2,7 +2,7 @@ package org.pro.newserver.global.logging;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.pro.newserver.global.exception.LoggingException;
+import org.pro.newserver.global.error.exception.LoggingException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Slf4j
