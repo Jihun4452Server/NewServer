@@ -8,5 +8,4 @@ public interface UserService {
 
 	String findEmailByNameAndPassword(String name, String password);
 
-	boolean isEmailDuplicated(String email);
 }

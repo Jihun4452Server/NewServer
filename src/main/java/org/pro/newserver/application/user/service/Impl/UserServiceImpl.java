@@ -1,7 +1,6 @@
 package org.pro.newserver.application.user.service.Impl;
 
 import lombok.RequiredArgsConstructor;
-
 import org.pro.newserver.application.user.UserMapper;
 import org.pro.newserver.application.user.dto.UserCommand;
 import org.pro.newserver.application.user.service.UserService;
@@ -17,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserValidator userValidator;
-	private final UserMapper userCommandMapper;
+	private final UserMapper userMapper;
 
 	@Transactional
 	@Override
@@ -25,7 +24,7 @@ public class UserServiceImpl implements UserService {
 		userValidator.validateName(command.name());
 		userValidator.validateDuplicateEmail(command.email());
 
-		User user = userCommandMapper.toUser(command);
+		User user = userMapper.toUser(command);
 		User saved = userRepository.save(user);
 		return saved.getId();
 	}
@@ -35,12 +34,5 @@ public class UserServiceImpl implements UserService {
 	public String findEmailByNameAndPassword(String name, String password) {
 		User user = userValidator.getUserByNameAndPasswordOrThrow(name, password);
 		return user.getEmail();
-	}
-
-
-	@Transactional(readOnly = true)
-	@Override
-	public boolean isEmailDuplicated(String email) {
-		return userRepository.existsByEmail(email);
 	}
 }

@@ -22,7 +22,6 @@ public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-	// Swagger / 문서용 공개 URL
 	private static final String[] SWAGGER_WHITELIST = {
 		"/v3/api-docs/**",
 		"/swagger-ui/**",
@@ -31,9 +30,10 @@ public class SecurityConfig {
 		"/webjars/**"
 	};
 
-	// 로그인/회원가입 등 인증 없이 열어둘 API (예시는 필요에 맞게 수정)
+	// 회원가입/로그인, 토큰 재발급, 헬스체크 등 공개 API
 	private static final String[] PUBLIC_APIS = {
 		"/api/auth/**",
+		"/api/users/**",
 		"/health"
 	};
 

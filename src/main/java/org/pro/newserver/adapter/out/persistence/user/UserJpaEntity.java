@@ -1,16 +1,19 @@
 package org.pro.newserver.adapter.out.persistence.user;
 
-import org.pro.newserver.domain.user.model.User;
 import org.pro.newserver.domain.user.model.Gender;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserJpaEntity {
 
 	@Id

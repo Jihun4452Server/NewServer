@@ -8,22 +8,23 @@ spring:
   h2:
     console:
       enabled: true
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL8Dialect
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update
-      defer-datasource-initialization: true
-      open-in-view: true
-      show-sql: true
-      generate-ddl: true
-    sql:
-      init:
-        mode: always
-    thymeleaf:
-      prefix: classpath:/templates/
-      suffix: .html
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    open-in-view: true
+    show-sql: true
+    generate-ddl: true
+  sql:
+    init:
+      mode: always
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
   data:
     redis:
       host: localhost
