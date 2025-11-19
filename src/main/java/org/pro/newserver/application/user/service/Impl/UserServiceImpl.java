@@ -6,7 +6,7 @@ import org.pro.newserver.application.user.dto.UserCommand;
 import org.pro.newserver.application.user.service.UserService;
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
-import org.pro.newserver.domain.user.validator.UserValidator;
+import org.pro.newserver.application.user.validator.UserValidator;
 import org.pro.newserver.global.error.ErrorCode;
 import org.pro.newserver.global.error.exception.UnauthorizedException;
 import org.springframework.security.crypto.password.PasswordEncoder;

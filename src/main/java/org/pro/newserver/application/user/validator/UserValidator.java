@@ -1,4 +1,4 @@
-package org.pro.newserver.domain.user.validator;
+package org.pro.newserver.application.user.validator;
 
 import lombok.RequiredArgsConstructor;
 

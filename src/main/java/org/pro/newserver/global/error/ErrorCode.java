@@ -23,7 +23,12 @@ public enum ErrorCode {
 	USER_NOT_FOUND(404, "U001", "사용자를 찾을 수 없습니다."),
 	USER_ALREADY_REGISTERED(409, "U002", "이미 가입된 사용자입니다."),
 	EMAIL_ALREADY_EXISTS(409, "U003", "이미 사용 중인 이메일입니다."),
-	USER_NAME_FAILED(403, "U004", "이름의 형식이 맞지않습니다.");
+	USER_NAME_FAILED(403, "U004", "이름의 형식이 맞지않습니다."),
+
+	//Post
+	POST_NOT_FOUND(404, "P001", "게시글을 찾을 수 없습니다."),
+	POST_TITLE_INVALID(400, "P002", "게시글 제목이 유효하지 않습니다."),
+	POST_CONTENT_INVALID(400, "P003", "게시글 내용이 유효하지 않습니다.");
 
 	private final String code;
 	private final String message;
