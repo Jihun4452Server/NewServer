@@ -12,7 +12,7 @@ public interface UserRepository {
 
 	Optional<User> findByEmail(String email);
 
-	Optional<User> findByNameAndPassword(String name, String password);
+	Optional<User> findByName(String name);
 
 	boolean existsByEmail(String email);
 }

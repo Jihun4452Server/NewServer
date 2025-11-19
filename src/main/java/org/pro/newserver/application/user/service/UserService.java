@@ -6,6 +6,6 @@ public interface UserService {
 
 	Long saveUser(UserCommand command);
 
-	String findEmailByNameAndPassword(String name, String password);
+	String findEmailByName(String name);
 
 }

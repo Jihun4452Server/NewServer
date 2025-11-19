@@ -34,8 +34,8 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public Optional<User> findByNameAndPassword(String name, String password) {
-		return userJpaRepository.findByNameAndPassword(name, password)
+	public Optional<User> findByName(String name) {
+		return userJpaRepository.findByName(name)
 			.map(userJpaMapper::toDomain);
 	}
 

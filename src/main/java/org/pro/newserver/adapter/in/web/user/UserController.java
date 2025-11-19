@@ -25,12 +25,11 @@ public class UserController {
 	@Operation(summary = "이름 + 비밀번호로 이메일 찾기", tags = "유저 기능")
 	@GetMapping("/find-email")
 	public ResponseDto<String> findEmail(
-		@RequestParam String name,
-		@RequestParam String password
+		@RequestParam String name
 	) {
 		return ResponseDto.of(
 			HttpStatus.OK,
-			userService.findEmailByNameAndPassword(name, password)
+			userService.findEmailByName(name)
 		);
 	}
 }

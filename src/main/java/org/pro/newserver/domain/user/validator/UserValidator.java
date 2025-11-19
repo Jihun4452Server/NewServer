@@ -33,8 +33,8 @@ public class UserValidator {
 		}
 	}
 
-	public User getUserByNameAndPasswordOrThrow(String name, String password) {
-		return userRepository.findByNameAndPassword(name, password)
+	public User getUserByName(String name) {
+		return userRepository.findByName(name)
 			.orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 	}
 }
