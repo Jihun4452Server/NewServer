@@ -2,6 +2,7 @@ package org.pro.newserver.global.jwt;
 
 import java.io.IOException;
 
+import org.pro.newserver.global.error.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

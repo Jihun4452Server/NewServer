@@ -1,7 +1,7 @@
 package org.pro.newserver.adapter.out.persistence.user;
 
 import org.pro.newserver.domain.user.model.User;
-import org.pro.newserver.domain.user.model.UserGender;
+import org.pro.newserver.domain.user.model.Gender;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,9 +25,9 @@ public class UserJpaEntity {
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	private UserGender gender;
+	private Gender gender;
 
-	public UserJpaEntity(String name, String email, String password, UserGender gender) {
+	public UserJpaEntity(String name, String email, String password, Gender gender) {
 		this.name = name;
 		this.email = email;
 		this.password = password;

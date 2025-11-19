@@ -2,6 +2,7 @@ package org.pro.newserver.adapter.out.persistence.user;
 
 import lombok.RequiredArgsConstructor;
 
+import org.pro.newserver.application.user.UserMapper;
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
 import org.springframework.stereotype.Repository;
@@ -13,30 +14,31 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
 	private final UserJpaRepository userJpaRepository;
+	private final UserMapper userMapper;
 
 	@Override
 	public User save(User user) {
-		UserJpaEntity entity = UserJpaEntity.fromDomain(user);
-		UserJpaEntity saved = userJpaRepository.save(entity);
-		return saved.toDomain();
+		var entity = userMapper.toEntity(user);
+		var saved = userJpaRepository.save(entity);
+		return userMapper.toDomain(saved);
 	}
 
 	@Override
 	public Optional<User> findById(Long id) {
 		return userJpaRepository.findById(id)
-			.map(UserJpaEntity::toDomain);
+			.map(userMapper::toDomain);
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
 		return userJpaRepository.findByEmail(email)
-			.map(UserJpaEntity::toDomain);
+			.map(userMapper::toDomain);
 	}
 
 	@Override
 	public Optional<User> findByNameAndPassword(String name, String password) {
 		return userJpaRepository.findByNameAndPassword(name, password)
-			.map(UserJpaEntity::toDomain);
+			.map(userMapper::toDomain);
 	}
 
 	@Override

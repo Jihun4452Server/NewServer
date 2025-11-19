@@ -3,6 +3,8 @@ package org.pro.newserver.global.error.handler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import org.pro.newserver.global.error.ErrorCode;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
