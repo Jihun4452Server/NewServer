@@ -26,30 +26,4 @@ public class UserJpaEntity {
 
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
-
-	public UserJpaEntity(String name, String email, String password, Gender gender) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.gender = gender;
-	}
-
-	public static UserJpaEntity fromDomain(User user) {
-		return new UserJpaEntity(
-			user.getName(),
-			user.getEmail(),
-			user.getPassword(),
-			user.getGender()
-		);
-	}
-
-	public User toDomain() {
-		return User.builder()
-			.id(id)
-			.name(name)
-			.email(email)
-			.password(password)
-			.gender(gender)
-			.build();
-	}
 }

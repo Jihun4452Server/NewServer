@@ -5,6 +5,7 @@ import org.pro.newserver.global.error.exception.JwtAuthenticationException;
 import org.pro.newserver.global.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.Cookie;

@@ -9,6 +9,11 @@ import java.util.UUID;
 import javax.crypto.SecretKey;
 
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
+import org.pro.newserver.domain.user.model.User;
+import org.pro.newserver.global.auth.dto.TokenResponse;
+import org.pro.newserver.global.error.ErrorCode;
+import org.pro.newserver.global.error.exception.BusinessException;
+import org.pro.newserver.global.error.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,15 +46,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Component
 public class JwtProvider {
+
 	private final UserRepository userRepository;
 
 	@Value("${jwt.secret}")
 	private String secretKeyString;
+
 	private SecretKey secretKey;
 
 	private static final String BEARER_PREFIX = "Bearer ";
-	private static final String CLAIM_GITHUB_ID = "githubId";
-	private static final String TOKEN_SUBJECT = "GamjaTech";
+	private static final String CLAIM_EMAIL = "email";
+	private static final String TOKEN_SUBJECT = "NewServer";
 
 	private static final long ACCESS_TOKEN_VALIDITY_MS = 30 * 60 * 1000L;
 	private static final long REFRESH_TOKEN_VALIDITY_MS = 7L * 24 * 60 * 60 * 1000L;
@@ -60,11 +67,11 @@ public class JwtProvider {
 		this.secretKey = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public String createAccessToken(String githubId) {
+	public String createAccessToken(String email) {
 		Date now = new Date();
 		return Jwts.builder()
 			.setSubject(TOKEN_SUBJECT)
-			.claim(CLAIM_GITHUB_ID, githubId)
+			.claim(CLAIM_EMAIL, email)
 			.setId(UUID.randomUUID().toString())
 			.setIssuedAt(now)
 			.setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALIDITY_MS))
@@ -72,11 +79,11 @@ public class JwtProvider {
 			.compact();
 	}
 
-	public String createRefreshToken(String githubId) {
+	public String createRefreshToken(String email) {
 		Date now = new Date();
 		return Jwts.builder()
 			.setSubject(TOKEN_SUBJECT)
-			.claim(CLAIM_GITHUB_ID, githubId)
+			.claim(CLAIM_EMAIL, email)
 			.setId(UUID.randomUUID().toString())
 			.setIssuedAt(now)
 			.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALIDITY_MS))
@@ -86,14 +93,16 @@ public class JwtProvider {
 
 	public String resolveAccessToken(HttpServletRequest req) {
 		String token = resolveToken(req.getHeader("ACCESS"));
-		if (token != null)
+		if (token != null) {
 			return token;
+		}
 		return resolveToken(req.getHeader("Authorization"));
 	}
 
 	public String resolveRefreshToken(HttpServletRequest req) {
-		if (req.getCookies() == null)
+		if (req.getCookies() == null) {
 			return null;
+		}
 		for (Cookie c : req.getCookies()) {
 			if ("refreshToken".equals(c.getName())) {
 				return resolveToken(c.getValue());
@@ -132,13 +141,13 @@ public class JwtProvider {
 		return false;
 	}
 
-	public String getGithubId(String token) {
+	public String getEmail(String token) {
 		Claims body = Jwts.parser()
 			.verifyWith(secretKey)
 			.build()
 			.parseSignedClaims(token)
 			.getBody();
-		return body.get(CLAIM_GITHUB_ID, String.class);
+		return body.get(CLAIM_EMAIL, String.class);
 	}
 
 	public String setInvalidAuthenticationMessage(String token) {
@@ -178,20 +187,18 @@ public class JwtProvider {
 	}
 
 	public Authentication getAuthentication(String token) {
-		String githubId = getGithubId(token);
-		User user = userRepository.findByGithubId(githubId)
-			.orElseThrow(() -> new UsernameNotFoundException("User not found: " + githubId));
-		Collection<GrantedAuthority> auths = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-
-		return new UsernamePasswordAuthenticationToken(user, null, auths);
+		String email = getEmail(token);
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+		return new UsernamePasswordAuthenticationToken(user, null);
 	}
 
-	public String extractGithubIdFromRefreshToken(String refreshToken) {
+	public String extractEmailFromRefreshToken(String refreshToken) {
 		if (!validateRefreshToken(refreshToken)) {
 			throw new UnauthorizedException(ErrorCode.AUTHENTICATION_FAILED);
 		}
 		Claims claims = parseClaimsOrThrow(refreshToken);
-		return claims.get(CLAIM_GITHUB_ID, String.class);
+		return claims.get(CLAIM_EMAIL, String.class);
 	}
 
 	public void addTokenHeaders(HttpServletResponse res, TokenResponse tokens) {
@@ -201,23 +208,23 @@ public class JwtProvider {
 
 	public String resolveAccessTokenFromHeader() {
 		ServletRequestAttributes attrs = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		if (attrs == null)
+		if (attrs == null) {
 			return null;
+		}
 		HttpServletRequest req = attrs.getRequest();
 		String raw = Optional.ofNullable(req.getHeader("ACCESS")).orElse(req.getHeader("Authorization"));
-		if (raw != null && raw.startsWith("Bearer ")) {
-			return raw.substring(7);
+		if (raw != null && raw.startsWith(BEARER_PREFIX)) {
+			return raw.substring(BEARER_PREFIX.length());
 		}
 		return null;
 	}
 
 	public long getRemainingAccessTokenValidity(String token) {
 		Claims body = Jwts.parser()
-			.setSigningKey(secretKey)
+			.verifyWith(secretKey)
 			.build()
-			.parseClaimsJws(token)
+			.parseSignedClaims(token)
 			.getBody();
-
 		Date exp = body.getExpiration();
 		long secondsLeft = (exp.getTime() - System.currentTimeMillis()) / 1000;
 		return Math.max(secondsLeft, 0L);

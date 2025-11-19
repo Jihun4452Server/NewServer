@@ -1,4 +1,7 @@
 package org.pro.newserver.adapter.in.web.user.dto.response;
 
-public class UserResponse {
-}
+public record UserResponse(
+	Long id,
+	String name,
+	String email
+) {}
