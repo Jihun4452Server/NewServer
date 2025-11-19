@@ -2,7 +2,6 @@ package org.pro.newserver.domain.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor

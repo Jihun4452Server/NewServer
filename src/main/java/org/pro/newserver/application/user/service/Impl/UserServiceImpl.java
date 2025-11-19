@@ -8,9 +8,7 @@ import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
 import org.pro.newserver.domain.user.validator.UserValidator;
 import org.pro.newserver.global.error.ErrorCode;
-import org.pro.newserver.global.error.exception.BusinessException;
 import org.pro.newserver.global.error.exception.UnauthorizedException;
-import org.pro.newserver.global.jwt.JwtProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,6 @@ public class UserServiceImpl implements UserService {
 	private final UserValidator userValidator;
 	private final UserMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtProvider jwtProvider;
 
 	@Transactional
 	@Override
@@ -34,13 +31,6 @@ public class UserServiceImpl implements UserService {
 		User user = userMapper.toUser(command,passwordEncoder);
 		User saved = userRepository.save(user);
 		return saved.getId();
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public String findEmailByName(String name) {
-		User user = userValidator.getUserByName(name);
-		return user.getEmail();
 	}
 
 	@Transactional(readOnly = true)

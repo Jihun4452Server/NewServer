@@ -6,7 +6,5 @@ public interface UserService {
 
 	Long saveUser(UserCommand command);
 
-	String findEmailByName(String name);
-
 	void login(String email, String password);
 }

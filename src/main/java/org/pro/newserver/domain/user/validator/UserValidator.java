@@ -34,11 +34,6 @@ public class UserValidator {
 		}
 	}
 
-	public User getUserByName(String name) {
-		return userRepository.findByName(name)
-			.orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-	}
-
 	public User getUserByEmailOrThrow(String email) {
 		return userRepository.findByEmail(email)
 			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
