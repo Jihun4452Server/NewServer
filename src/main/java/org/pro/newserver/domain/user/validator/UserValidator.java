@@ -8,6 +8,7 @@ import org.pro.newserver.domain.user.exception.UserNotFoundException;
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
 import org.pro.newserver.global.error.ErrorCode;
+import org.pro.newserver.global.error.exception.BusinessException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,5 +37,10 @@ public class UserValidator {
 	public User getUserByName(String name) {
 		return userRepository.findByName(name)
 			.orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+	}
+
+	public User getUserByEmailOrThrow(String email) {
+		return userRepository.findByEmail(email)
+			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 	}
 }

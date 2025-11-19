@@ -1,9 +1,6 @@
 package org.pro.newserver.global.jwt;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
@@ -11,29 +8,19 @@ import javax.crypto.SecretKey;
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
 import org.pro.newserver.global.auth.dto.TokenResponse;
-import org.pro.newserver.global.error.ErrorCode;
-import org.pro.newserver.global.error.exception.BusinessException;
-import org.pro.newserver.global.error.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -112,6 +99,18 @@ public class JwtProvider {
 		return null;
 	}
 
+	public TokenResponse createTokens(String email) {
+		String accessToken = createAccessToken(email);
+		String refreshToken = createRefreshToken(email);
+		return new TokenResponse(accessToken, refreshToken);
+	}
+
+	public TokenResponse issueTokensAndAddHeaders(HttpServletResponse res, String email) {
+		TokenResponse tokens = createTokens(email);
+		addTokenHeaders(res, tokens);
+		return tokens;
+	}
+
 	private String resolveToken(String header) {
 		if (header != null && header.startsWith(BEARER_PREFIX)) {
 			return header.substring(BEARER_PREFIX.length());
@@ -121,10 +120,6 @@ public class JwtProvider {
 
 	public boolean validateAccessToken(String token) {
 		return validateToken(token, "Access");
-	}
-
-	public boolean validateRefreshToken(String token) {
-		return validateToken(token, "Refresh");
 	}
 
 	private boolean validateToken(String token, String type) {
@@ -151,42 +146,6 @@ public class JwtProvider {
 		return body.get(CLAIM_EMAIL, String.class);
 	}
 
-	public String setInvalidAuthenticationMessage(String token) {
-		try {
-			Jwts.parser()
-				.verifyWith(secretKey)
-				.build()
-				.parseSignedClaims(token);
-			return "Logic Error : Backend 확인 필요";
-		} catch (UnsupportedJwtException | MalformedJwtException e) {
-			return ErrorCode.UNSUPPORTED_JWT.getMessage();
-		} catch (ExpiredJwtException e) {
-			return ErrorCode.EXPIRED_JWT.getMessage();
-		} catch (SignatureException e) {
-			return ErrorCode.SIGNATURE_INVALID_JWT.getMessage();
-		} catch (IllegalArgumentException e) {
-			return ErrorCode.JWT_NOT_FOUND.getMessage();
-		}
-	}
-
-	public Claims parseClaimsOrThrow(String token) {
-		try {
-			return Jwts.parser()
-				.verifyWith(secretKey)
-				.build()
-				.parseSignedClaims(token)
-				.getBody();
-		} catch (ExpiredJwtException e) {
-			throw new BusinessException(ErrorCode.EXPIRED_JWT);
-		} catch (UnsupportedJwtException | MalformedJwtException e) {
-			throw new BusinessException(ErrorCode.UNSUPPORTED_JWT);
-		} catch (SignatureException e) {
-			throw new BusinessException(ErrorCode.SIGNATURE_INVALID_JWT);
-		} catch (IllegalArgumentException e) {
-			throw new BusinessException(ErrorCode.JWT_NOT_FOUND);
-		}
-	}
-
 	public Authentication getAuthentication(String token) {
 		String email = getEmail(token);
 		User user = userRepository.findByEmail(email)
@@ -200,40 +159,8 @@ public class JwtProvider {
 		);
 	}
 
-	public String extractEmailFromRefreshToken(String refreshToken) {
-		if (!validateRefreshToken(refreshToken)) {
-			throw new UnauthorizedException(ErrorCode.AUTHENTICATION_FAILED);
-		}
-		Claims claims = parseClaimsOrThrow(refreshToken);
-		return claims.get(CLAIM_EMAIL, String.class);
-	}
-
 	public void addTokenHeaders(HttpServletResponse res, TokenResponse tokens) {
 		String bearer = BEARER_PREFIX + tokens.getAccessToken();
 		res.setHeader("Authorization", bearer);
-	}
-
-	public String resolveAccessTokenFromHeader() {
-		ServletRequestAttributes attrs = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		if (attrs == null) {
-			return null;
-		}
-		HttpServletRequest req = attrs.getRequest();
-		String raw = Optional.ofNullable(req.getHeader("ACCESS")).orElse(req.getHeader("Authorization"));
-		if (raw != null && raw.startsWith(BEARER_PREFIX)) {
-			return raw.substring(BEARER_PREFIX.length());
-		}
-		return null;
-	}
-
-	public long getRemainingAccessTokenValidity(String token) {
-		Claims body = Jwts.parser()
-			.verifyWith(secretKey)
-			.build()
-			.parseSignedClaims(token)
-			.getBody();
-		Date exp = body.getExpiration();
-		long secondsLeft = (exp.getTime() - System.currentTimeMillis()) / 1000;
-		return Math.max(secondsLeft, 0L);
 	}
 }

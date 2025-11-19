@@ -8,4 +8,5 @@ public interface UserService {
 
 	String findEmailByName(String name);
 
+	void login(String email, String password);
 }
