@@ -34,12 +34,6 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public Optional<User> findByName(String name) {
-		return userJpaRepository.findByName(name)
-			.map(userJpaMapper::toDomain);
-	}
-
-	@Override
 	public boolean existsByEmail(String email) {
 		return userJpaRepository.existsByEmail(email);
 	}
