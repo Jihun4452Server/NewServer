@@ -1,11 +1,13 @@
 package org.pro.newserver.global.logging;
 
-import lombok.extern.slf4j.Slf4j;
 import org.pro.newserver.global.error.exception.LoggingException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class LoggingUtils {
+
   public static void warn(LoggingException exception) {
     String message = getExceptionMessage(exception.getMessage());
     log.warn(message + "\n \t {}", exception);
@@ -16,15 +18,20 @@ public class LoggingUtils {
     log.warn(message + "\n \t {}", exception);
   }
 
-  private static String getExceptionMessage(String message) {
-    if (message == null || message.isBlank()) {
-      return "";
-    }
-    return message;
+  public static void warn(Exception exception) {
+    String message = getExceptionMessage(exception.getMessage());
+    log.warn(message + "\n \t {}", exception);
   }
 
   public static void error(RuntimeException exception) {
     String message = getExceptionMessage(exception.getMessage());
     log.error(message + "\n \t {}", exception);
+  }
+
+  private static String getExceptionMessage(String message) {
+    if (message == null || message.isBlank()) {
+      return "";
+    }
+    return message;
   }
 }
