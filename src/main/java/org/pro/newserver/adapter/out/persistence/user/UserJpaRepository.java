@@ -1,14 +1,13 @@
 package org.pro.newserver.adapter.out.persistence.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity, Long> {
 
-	Optional<UserJpaEntity> findByEmail(String email);
+  Optional<UserJpaEntity> findByEmail(String email);
 
-	Optional<UserJpaEntity> findByName(String name);
+  Optional<UserJpaEntity> findByName(String name);
 
-	boolean existsByEmail(String email);
+  boolean existsByEmail(String email);
 }

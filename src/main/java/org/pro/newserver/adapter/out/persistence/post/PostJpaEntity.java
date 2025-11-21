@@ -1,10 +1,9 @@
 package org.pro.newserver.adapter.out.persistence.post;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 import org.pro.newserver.adapter.out.persistence.user.UserJpaEntity;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "post")
@@ -14,29 +13,28 @@ import java.time.LocalDateTime;
 @Builder
 public class PostJpaEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-	private String title;
+  private String title;
 
-	@Lob
-	private String content;
+  @Lob private String content;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private UserJpaEntity author;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private UserJpaEntity author;
 
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
-	public void update(String title, String content) {
-		this.title = title;
-		this.content = content;
-		this.updatedAt = LocalDateTime.now();
-	}
+  public void update(String title, String content) {
+    this.title = title;
+    this.content = content;
+    this.updatedAt = LocalDateTime.now();
+  }
 
-	public void setAuthor(UserJpaEntity author) {
-		this.author = author;
-	}
+  public void setAuthor(UserJpaEntity author) {
+    this.author = author;
+  }
 }

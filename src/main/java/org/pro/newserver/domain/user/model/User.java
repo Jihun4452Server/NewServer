@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class User {
-	private Long id;
-	private String name;
-	private String email;
-	private String password;
-	private Gender gender;
+  private Long id;
+  private String name;
+  private String email;
+  private String password;
+  private Gender gender;
 }
-

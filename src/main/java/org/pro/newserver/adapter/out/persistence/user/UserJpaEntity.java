@@ -1,12 +1,11 @@
 package org.pro.newserver.adapter.out.persistence.user;
 
-import org.pro.newserver.domain.user.model.Gender;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.pro.newserver.domain.user.model.Gender;
 
 @Entity
 @Table(name = "users")
@@ -16,17 +15,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserJpaEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-	private String name;
+  private String name;
 
-	@Column(unique = true, nullable = false)
-	private String email;
+  @Column(unique = true, nullable = false)
+  private String email;
 
-	private String password;
+  private String password;
 
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
 }

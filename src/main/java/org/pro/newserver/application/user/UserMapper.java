@@ -10,8 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "password",
-		expression = "java(passwordEncoder.encode(command.password()))")
-	User toUser(UserCommand command, @Context PasswordEncoder passwordEncoder);
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "password", expression = "java(passwordEncoder.encode(command.password()))")
+  User toUser(UserCommand command, @Context PasswordEncoder passwordEncoder);
 }

@@ -1,13 +1,12 @@
 package org.pro.newserver.global.error.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
 public class LoggingException extends RuntimeException {
-	private final HttpStatus status;
-	private final String message;
+  private final HttpStatus status;
+  private final String message;
 }
