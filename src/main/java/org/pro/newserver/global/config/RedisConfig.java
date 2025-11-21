@@ -53,26 +53,4 @@ public class RedisConfig {
     template.setValueSerializer(new StringRedisSerializer());
     return template;
   }
-
-  @Bean
-  public RedisTemplate<String, Object> cacheRedisTemplate(
-      LettuceConnectionFactory redisConnectionFactory) {
-    RedisTemplate<String, Object> template = new RedisTemplate<>();
-    template.setConnectionFactory(redisConnectionFactory);
-    template.setKeySerializer(new StringRedisSerializer());
-    template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-    template.setHashKeySerializer(new StringRedisSerializer());
-    template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-    return template;
-  }
-
-  @Bean
-  public StringRedisTemplate cacheStringRedisTemplate(
-      LettuceConnectionFactory redisConnectionFactory) {
-    StringRedisTemplate template = new StringRedisTemplate();
-    template.setConnectionFactory(redisConnectionFactory);
-    template.setKeySerializer(new StringRedisSerializer());
-    template.setValueSerializer(new StringRedisSerializer());
-    return template;
-  }
 }

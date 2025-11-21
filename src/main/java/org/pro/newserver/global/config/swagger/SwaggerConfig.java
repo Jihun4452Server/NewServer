@@ -1,4 +1,4 @@
-package org.pro.newserver.global.config;
+package org.pro.newserver.global.config.swagger;
 
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
