@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.pro.newserver.adapter.in.web.post.dto.request.PostRequest;
 import org.pro.newserver.adapter.in.web.post.dto.response.PostResponse;
 import org.pro.newserver.global.common.CurrentUser;
-import org.pro.newserver.global.config.swagger.CommonErrorResponses;
 import org.pro.newserver.global.dto.ResponseDto;
 import org.pro.newserver.global.jwt.UserDetailsImpl;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 @Tag(name = "게시글 기능", description = "게시글 생성 / 조회 / 수정 / 삭제 API")
-@CommonErrorResponses
 public class PostController {
 
   private final PostFacade postFacade;
