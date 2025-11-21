@@ -12,7 +12,10 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
   private SecurityScheme createBearerAuthScheme() {
-    return new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer");
+    return new SecurityScheme()
+        .type(SecurityScheme.Type.HTTP)
+        .bearerFormat("JWT")
+        .scheme("bearer");
   }
 
   private OpenApiCustomizer createOpenApiCustomizer(String title, String version) {
@@ -24,12 +27,13 @@ public class SwaggerConfig {
   }
 
   @Bean
-  public GroupedOpenApi allApi() {
+  public GroupedOpenApi allApi(ApiErrorCodeOperationCustomizer apiErrorCodeOperationCustomizer) {
     return GroupedOpenApi.builder()
         .group("all")
         .pathsToMatch("/**")
         .displayName("All API")
         .addOpenApiCustomizer(createOpenApiCustomizer("모든 API", "v0.4"))
+        .addOperationCustomizer(apiErrorCodeOperationCustomizer)
         .build();
   }
 }

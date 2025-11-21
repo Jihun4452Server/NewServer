@@ -3,12 +3,9 @@ package org.pro.newserver.global.config.swagger;
 import org.pro.newserver.global.error.ErrorCode;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.examples.Example;
-import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Content;
-import io.swagger.v3.oas.models.media.IntegerSchema;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.springdoc.core.customizers.OperationCustomizer;
@@ -66,7 +63,7 @@ public class ApiErrorCodeOperationCustomizer implements OperationCustomizer {
 			MediaType mediaType = content.get("application/json");
 			if (mediaType == null) {
 				mediaType = new MediaType();
-				mediaType.setSchema(createErrorSchema());
+				mediaType.setSchema(new Schema<>().$ref("#/components/schemas/ErrorResponse"));
 				content.addMediaType("application/json", mediaType);
 			}
 
@@ -94,17 +91,5 @@ public class ApiErrorCodeOperationCustomizer implements OperationCustomizer {
 			.code(errorCode.getCode())
 			.holder(example)
 			.build();
-	}
-
-	private Schema<?> createErrorSchema() {
-		Schema<?> schema = new Schema<>();
-		schema.setType("object");
-		schema.addProperty("message", new StringSchema().example("이미 사용 중인 이메일입니다."));
-		schema.addProperty("status", new IntegerSchema().example(409));
-		schema.addProperty("errors", new ArraySchema()
-			.items(new StringSchema())
-			.example(Collections.emptyList()));
-		schema.addProperty("code", new StringSchema().example("U003"));
-		return schema;
 	}
 }
