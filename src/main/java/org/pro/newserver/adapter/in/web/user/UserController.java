@@ -8,9 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.pro.newserver.adapter.in.web.user.dto.request.LoginRequest;
 import org.pro.newserver.adapter.in.web.user.dto.request.UserRequest;
 import org.pro.newserver.global.dto.ResponseDto;
-import org.pro.newserver.global.error.ErrorCode;
-import org.pro.newserver.global.config.swagger.ApiErrorCodeExample;
 import org.pro.newserver.global.config.swagger.ApiErrorCodeExamples;
+import org.pro.newserver.global.error.ErrorCode;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,7 +31,10 @@ public class UserController {
   }
 
   @Operation(summary = "로그인")
-  @ApiErrorCodeExample(ErrorCode.USER_NOT_FOUND)
+  @ApiErrorCodeExamples({
+      ErrorCode.USER_NOT_FOUND,
+      ErrorCode.AUTHENTICATION_FAILED
+  })
   @PostMapping("/login")
   public ResponseDto<String> login(
       @Valid @RequestBody LoginRequest request,

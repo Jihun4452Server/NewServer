@@ -1,6 +1,5 @@
 package org.pro.newserver.global.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Optional;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ public class ResponseDto<T> {
   private final int status;
   private final String message;
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   private final T data;
 
   private final long timestamp;
