@@ -45,5 +45,7 @@ out/
 *.gif
 *.svg
 
+!img_1.png
+!img.png
 !img_6.png
 !img_8.png
