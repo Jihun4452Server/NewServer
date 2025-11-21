@@ -37,9 +37,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public void login(String email, String password) {
     User user = userValidator.getUserByEmailOrThrow(email);
-
-    if (!passwordEncoder.matches(password, user.getPassword())) {
-      throw new UnauthorizedException(ErrorCode.AUTHENTICATION_FAILED);
-    }
+    userValidator.validatePassword(password, user.getPassword(), passwordEncoder);
   }
 }

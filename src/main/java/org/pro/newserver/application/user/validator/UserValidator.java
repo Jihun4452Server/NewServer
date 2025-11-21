@@ -6,7 +6,8 @@ import org.pro.newserver.domain.user.exception.InvalidUserNameException;
 import org.pro.newserver.domain.user.exception.UserNotFoundException;
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
-import org.pro.newserver.global.error.ErrorCode;
+import org.pro.newserver.global.error.exception.UnauthorizedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,5 +42,11 @@ public class UserValidator {
   public User getUserByEmailOrThrow(String email) {
     return userRepository.findByEmail(email)
         .orElseThrow(UserNotFoundException::new);
+  }
+
+  public void validatePassword(String rawPassword, String encodedPassword, PasswordEncoder encoder) {
+    if (!encoder.matches(rawPassword, encodedPassword)) {
+      throw new UnauthorizedException();
+    }
   }
 }
