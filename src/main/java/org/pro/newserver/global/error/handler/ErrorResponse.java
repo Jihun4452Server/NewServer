@@ -3,6 +3,8 @@ package org.pro.newserver.global.error.handler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +12,21 @@ import org.pro.newserver.global.error.ErrorCode;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+@Schema(description = "공통 에러 응답")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 
+  @Schema(description = "에러 메시지", example = "게시글을 찾을 수 없습니다.")
   private String message;
+
+  @Schema(description = "HTTP 상태 코드", example = "404")
   private int status;
+
+  @Schema(description = "필드 에러 목록")
   private List<FieldError> errors;
+
+  @Schema(description = "비즈니스 에러 코드", example = "P001")
   private String code;
 
   private ErrorResponse(final ErrorCode code, final List<FieldError> errors) {
@@ -55,8 +65,13 @@ public class ErrorResponse {
   @Getter
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class FieldError {
+    @Schema(description = "필드명", example = "title")
     private String field;
+
+    @Schema(description = "거부된 값", example = "")
     private String value;
+
+    @Schema(description = "오류 이유", example = "must not be blank")
     private String reason;
 
     private FieldError(final String field, final String value, final String reason) {
