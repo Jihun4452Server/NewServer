@@ -11,4 +11,5 @@ public class ExampleHolder {
 	private Example holder;
 	private String name;
 	private int status;
+	private String code;
 }

@@ -91,6 +91,7 @@ public class ApiErrorCodeOperationCustomizer implements OperationCustomizer {
 		return ExampleHolder.builder()
 			.name(errorCode.name())
 			.status(errorCode.getStatus())
+			.code(errorCode.getCode())
 			.holder(example)
 			.build();
 	}
