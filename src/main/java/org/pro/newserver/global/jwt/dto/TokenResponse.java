@@ -1,4 +1,4 @@
-package org.pro.newserver.global.auth.dto;
+package org.pro.newserver.global.jwt.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 
 import org.pro.newserver.domain.user.infrastructure.UserRepository;
 import org.pro.newserver.domain.user.model.User;
-import org.pro.newserver.global.auth.dto.TokenResponse;
+import org.pro.newserver.global.jwt.dto.TokenResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

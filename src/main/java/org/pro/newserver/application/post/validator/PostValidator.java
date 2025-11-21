@@ -33,7 +33,7 @@ public class PostValidator {
 	}
 
 	public void validatePostOwner(Post post, Long currentUserId) {
-		if (!post.getAuthor().getId().equals(currentUserId)) {
+		if (!post.getAuthorId().equals(currentUserId)) {
 			throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
 		}
 	}

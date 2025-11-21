@@ -1,7 +1,6 @@
 package org.pro.newserver.application.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
 import org.pro.newserver.application.post.PostMapper;
 import org.pro.newserver.application.post.dto.PostCommand;
 import org.pro.newserver.application.post.service.PostService;
@@ -32,11 +31,13 @@ public class PostServiceImpl implements PostService {
 		User author = userRepository.findById(currentUserId)
 			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-		Post post = postMapper.toEntity(command, author);
+		Post post = postMapper.toDomain(command, author);
+
 		return postRepository.save(post);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Post getPost(Long postId) {
 		return postValidator.validatePostExist(postId);
 	}
@@ -44,16 +45,20 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post updatePost(Long postId, Long currentUserId, PostCommand command) {
 		postValidator.validateCommand(command);
+
 		Post post = postValidator.validatePostExist(postId);
 		postValidator.validatePostOwner(post, currentUserId);
+
 		post.update(command.getTitle(), command.getContent());
-		return post;
+
+		return postRepository.save(post);
 	}
 
 	@Override
 	public void deletePost(Long postId, Long currentUserId) {
 		Post post = postValidator.validatePostExist(postId);
 		postValidator.validatePostOwner(post, currentUserId);
-		postRepository.delete(post);
+
+		postRepository.deleteById(post.getId());
 	}
 }

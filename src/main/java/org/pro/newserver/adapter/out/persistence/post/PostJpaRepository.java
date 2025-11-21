@@ -1,4 +1,6 @@
 package org.pro.newserver.adapter.out.persistence.post;
 
-public class PostJpaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
 }

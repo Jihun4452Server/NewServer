@@ -4,23 +4,27 @@ import lombok.Builder;
 import lombok.Getter;
 import org.pro.newserver.domain.post.model.Post;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class PostResponse {
 
-	private Long id;
-	private String title;
-	private String content;
-	private Long authorId;
-	private String authorName;
+	private final Long id;
+	private final Long authorId;
+	private final String title;
+	private final String content;
+	private final LocalDateTime createdAt;
+	private final LocalDateTime updatedAt;
 
 	public static PostResponse from(Post post) {
 		return PostResponse.builder()
 			.id(post.getId())
+			.authorId(post.getAuthorId())
 			.title(post.getTitle())
 			.content(post.getContent())
-			.authorId(post.getAuthor().getId())
-			.authorName(post.getAuthor().getName()) // 필드명에 맞게 수정
+			.createdAt(post.getCreatedAt())
+			.updatedAt(post.getUpdatedAt())
 			.build();
 	}
 }

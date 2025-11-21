@@ -10,8 +10,8 @@ import org.pro.newserver.domain.user.model.User;
 public interface PostMapper {
 
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "author", source = "author")
-	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "authorId", source = "author.id")
+	@Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
 	@Mapping(target = "updatedAt", ignore = true)
-	Post toEntity(PostCommand command, User author);
+	Post toDomain(PostCommand command, User author);
 }

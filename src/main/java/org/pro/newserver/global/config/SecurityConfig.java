@@ -32,7 +32,6 @@ public class SecurityConfig {
 		"/webjars/**"
 	};
 
-	// 회원가입/로그인, 토큰 재발급, 헬스체크 등 공개 API
 	private static final String[] PUBLIC_APIS = {
 		"/api/auth/**",
 		"/api/users/**",
