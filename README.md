@@ -44,8 +44,15 @@
   `Controller → Service → Validator → Domain Repository → Persistence(JPA)`  
   동일한 패턴을 따르도록 맞췄습니다.
 
+### 시스템 아키텍처
+![img_3.png](img_3.png)
+
 ### 배포 자동화
 ![img.png](img.png)
 
-### 시스템 아키텍처
-![img_3.png](img_3.png)
+#### CI 흐름도
+![img_6.png](img_6.png)
+
+#### CD 흐름도
+![img_8.png](img_8.png)
+
