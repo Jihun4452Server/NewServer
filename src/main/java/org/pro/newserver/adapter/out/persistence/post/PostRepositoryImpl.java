@@ -16,17 +16,11 @@ import java.util.Optional;
 public class PostRepositoryImpl implements PostRepository {
 
 	private final PostJpaRepository postJpaRepository;
-	private final UserJpaRepository userJpaRepository;
 	private final PostJpaMapper postJpaMapper;
 
 	@Override
 	public Post save(Post post) {
-		UserJpaEntity author = userJpaRepository.findById(post.getAuthorId())
-			.orElseThrow(() -> new IllegalArgumentException("User not found: " + post.getAuthorId()));
-
 		PostJpaEntity entity = postJpaMapper.toEntity(post);
-		entity.setAuthor(author);
-
 		PostJpaEntity saved = postJpaRepository.save(entity);
 		return postJpaMapper.toDomain(saved);
 	}
@@ -39,8 +33,7 @@ public class PostRepositoryImpl implements PostRepository {
 
 	@Override
 	public List<Post> findAll() {
-		return postJpaRepository.findAll()
-			.stream()
+		return postJpaRepository.findAll().stream()
 			.map(postJpaMapper::toDomain)
 			.toList();
 	}
@@ -50,4 +43,5 @@ public class PostRepositoryImpl implements PostRepository {
 		postJpaRepository.deleteById(id);
 	}
 }
+
 
