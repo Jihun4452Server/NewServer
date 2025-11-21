@@ -6,6 +6,9 @@ import jakarta.validation.Validator;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.pro.newserver.application.post.dto.PostCommand;
+import org.pro.newserver.domain.post.exception.PostContentInvalidException;
+import org.pro.newserver.domain.post.exception.PostNotFoundException;
+import org.pro.newserver.domain.post.exception.PostTitleInvalidException;
 import org.pro.newserver.domain.post.infrastructure.PostRepository;
 import org.pro.newserver.domain.post.model.Post;
 import org.pro.newserver.global.error.ErrorCode;
@@ -21,20 +24,29 @@ public class PostValidator {
 
   public void validateCommand(PostCommand command) {
     Set<ConstraintViolation<PostCommand>> violations = validator.validate(command);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    handleConstraintViolations(violations);
   }
 
   public Post validatePostExist(Long postId) {
-    return postRepository
-        .findById(postId)
-        .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+    return postRepository.findById(postId)
+        .orElseThrow(PostNotFoundException::new);
   }
 
   public void validatePostOwner(Post post, Long currentUserId) {
     if (!post.getAuthorId().equals(currentUserId)) {
       throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
+    }
+  }
+
+  private void handleConstraintViolations(Set<ConstraintViolation<PostCommand>> violations) {
+
+    for (ConstraintViolation<PostCommand> violation : violations) {
+      String field = violation.getPropertyPath().toString();
+
+      switch (field) {
+        case "title" -> throw new PostTitleInvalidException();
+        case "content" -> throw new PostContentInvalidException();
+      }
     }
   }
 }

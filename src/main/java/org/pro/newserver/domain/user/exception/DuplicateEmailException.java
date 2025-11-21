@@ -4,7 +4,7 @@ import org.pro.newserver.global.error.ErrorCode;
 import org.pro.newserver.global.error.exception.BusinessException;
 
 public class DuplicateEmailException extends BusinessException {
-  public DuplicateEmailException(ErrorCode errorCode) {
-    super(errorCode);
+  public DuplicateEmailException() {
+    super(ErrorCode.EMAIL_ALREADY_EXISTS);
   }
 }
