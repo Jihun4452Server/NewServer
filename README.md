@@ -45,14 +45,14 @@
   동일한 패턴을 따르도록 맞췄습니다.
 
 ### 시스템 아키텍처
-![img_1.png](img_3.png)
+![img_1.png](img/img_3.png)
 
 ### 배포 자동화
-![img.png](img.png)
+![img.png](img/img.png)
 
 #### CI 흐름도
-![img_6.png](img_6.png)
+![img_6.png](img/img_6.png)
 
 #### CD 흐름도
-![img_8.png](img_8.png)
+![img_8.png](img/img_8.png)
 
