@@ -45,7 +45,7 @@
   동일한 패턴을 따르도록 맞췄습니다.
 
 ### 시스템 아키텍처
-![img_3.png](img_3.png)
+![img_1.png](img_3.png)
 
 ### 배포 자동화
 ![img.png](img.png)

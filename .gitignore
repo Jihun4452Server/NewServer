@@ -44,3 +44,6 @@ out/
 *.jpeg
 *.gif
 *.svg
+
+!img_6.png
+!img_8.png
